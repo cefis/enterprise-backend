@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { UsersDTO } from './users.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/database/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: UsersDTO) {
-    if (!data.name || !data.password) {
-      throw new Error('Preencha os campos  vazios');
-    }
+  async create(createUserDto: CreateUserDto) {
+    const data = {
+      ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 6),
+    };
 
-    const user = await this.prisma.user.create({
+    const createdUser = await this.prisma.user.create({
       data,
     });
-    return user;
-  }
-
-  async findAll() {
-    return this.prisma.user.findMany();
+    return {
+      ...createdUser,
+      password: undefined,
+    };
   }
 }
