@@ -21,4 +21,8 @@ export class UsersService {
       password: undefined,
     };
   }
+
+  findByUser(name: string) {
+    return this.prisma.user.findFirst({ where: { name } });
+  }
 }
