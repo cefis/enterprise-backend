@@ -13,7 +13,7 @@ model User {
   password  String
   createdAt DateTime  @default(now())
   deletedAt DateTime?
-  type      TypeUser
+  type      TypeUser?
   courses   Course[]
 
   @@map("users")

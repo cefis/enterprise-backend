@@ -7,5 +7,5 @@ export class User {
   id?: string;
   name: string;
   password: string;
-  type: TypeUser;
+  type?: TypeUser;
 }
